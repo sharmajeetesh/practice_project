@@ -1,0 +1,43 @@
+pipeline {
+    agent any
+
+    stages {
+         stage('checkout project') {
+            steps {
+              checkout scmGit(branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[credentialsId: 'Jeetesh-github-id', url: 'https://github.com/sharmajeetesh/Demo_Project1.git']]) 
+            }
+        }
+        stage('project build') {
+            steps {
+                bat '''
+                cd demo
+             mvn clean install
+             '''
+            }
+        }
+        stage('docker image create') {
+            steps {
+                bat '''
+                docker ps
+                docker build -t sharmajeetesh/newrepo:1 .
+                docker run -d -p 9999:8081 sharmajeetesh/newrepo:1
+                docker ps
+                '''
+            }
+        }
+         stage('docker push image') {
+            steps {
+                withDockerRegistry(credentialsId: 'jeetesh-docker-hub', url: 'https://index.docker.io/v1/') {
+             bat "docker push sharmajeetesh/newrepo:1"
+                
+            }
+        }
+    }
+    }
+ post {
+   always {
+    emailext attachLog: true, body: 'email attachment job', subject: 'email attachment job', to: 'sharmajeetesh.260@gmail.com'
+        }
+    }
+ 
+}
