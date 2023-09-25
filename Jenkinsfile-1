@@ -1,1 +1,26 @@
+pipeline{
+    agent any
+    tools {
+        jdk 'java'
+    }
 
+stages{
+        stage("Git Clone Repository"){
+            steps{
+           //     checkout([$class: 'GitSCM', branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[credentialsId: 'anish-github-repo', url: 'https://github.com/anishkumar7836/demo.git']]])
+          checkout([$class: 'GitSCM', branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[credentialsId: '', url: 'https://github.com/sharmajeetesh/Demo_Project1.git']]])
+}
+        }
+        stage("List Project Directory"){
+            steps{
+            sh 'ls -l && ls -l demo'
+            }
+        }
+        stage("Build Demo Project & list jar file"){
+            steps{
+                sh 'cd demo && mvn clean install && ls -l target'
+            }
+        }
+}
+
+}
