@@ -21,6 +21,21 @@ stages{
                 sh 'cd demo && mvn clean install && ls -l target'
             }
         }
+        stage("create docker image build"){
+            steps{
+                sh '''
+                 cd demo
+                 docker build -t sharmajeetesh/demo:1 .
+                '''
+            }
+        }
+        stage("Push demo image to Registry"){
+            steps{
+                withDockerRegistry(credentialsId: 'docker-login', url: 'https://registry.hub.docker.com'){
+                sh " docker push sharmajeetesh/demo:1"
+                }
+            }
+        }
 }
 
 }
