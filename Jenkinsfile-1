@@ -24,14 +24,14 @@ stages{
             steps{
                 sh '''
                  cd demo
-                 docker build -t sharmajeetesh/demo:1 .
+                 docker build -t sharmajeetesh/demo:2 .
                 '''
             }
         }
         stage("Push demo image to Registry"){
             steps{
                 withDockerRegistry(credentialsId: 'docker-login', url: 'https://index.docker.io/v1/'){
-                sh " docker push sharmajeetesh/demo:1"
+                sh " docker push sharmajeetesh/demo:2"
                 }
             }
         }
