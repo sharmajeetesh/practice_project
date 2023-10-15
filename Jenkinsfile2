@@ -1,0 +1,31 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('git clone') {
+            steps {
+                checkout scmGit(branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/sharmajeetesh/practice_project.git']])
+            }
+        }
+        stage("Build Demo Project & list jar file"){
+            steps{
+                sh 'cd demo && mvn clean install && ls -l target'
+            }
+        } 
+         stage("create docker image build"){
+            steps{
+                sh '''
+                 cd demo
+                 docker build -t sharmajeetesh/demo:3 .
+                '''
+            }
+        }
+        stage("push docker image to registory"){
+            steps{
+                withDockerRegistry(credentialsId: 'docker-login', url: 'https://index.docker.io/v1/'){
+                sh 'docker push sharmajeetesh/demo:3'
+                }
+            }
+        }
+    }
+}
