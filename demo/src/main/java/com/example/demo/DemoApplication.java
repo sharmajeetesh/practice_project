@@ -15,7 +15,7 @@ public class DemoApplication {
 
 	@GetMapping("/")
 	public String test(){
-		return "Hello From Spring Demo App.";
+		return "Hello From Spring Demo App thsi line is added for testing purpose.";
 	}
 
 }
