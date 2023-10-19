@@ -16,14 +16,14 @@ pipeline {
             steps{
                 sh '''
                  cd demo
-                 docker build -t sharmajeetesh/demo:3 .
+                 docker build -t sharmajeetesh/demo:4 .
                 '''
             }
         }
         stage("push docker image to registory"){
             steps{
                 withDockerRegistry(credentialsId: 'docker-login', url: 'https://index.docker.io/v1/'){
-                sh 'docker push sharmajeetesh/demo:3'
+                sh 'docker push sharmajeetesh/demo:4'
                 }
             }
         }
